@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="view1.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Admin Dashboard Panel</title>
+    
+</head>
+<body>
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="images/logo.png" alt="">
+            </div>
+        </div>
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="menu.html"><i class="uil uil-estate"></i><span class="link-name">Dashboard</span></a></li>
+                <li><a href="comment.html"><i class="uil uil-comments"></i><span class="link-name">Comment</span></a></li>
+                <li><a href="notify.html"><i class="fas fa-bell"></i><span class="link-name">Notification</span></a></li>
+                <li><a href="#"><i class="fas fa-file-alt reports-icon"></i><span class="link-name">Reports</span></a></li>
+            </ul>
+            <ul class="nav-links">
+                <li><a href="login.html"><i class="uil uil-signout"></i><span class="link-name">Logout</span></a></li>
+                <li class="mode">
+                    <a href="#"><i class="uil uil-moon"></i><span class="link-name">Dark Mode</span></a>
+                    <div class="mode-toggle"><span class="switch"></span></div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+        </div>
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <span class="text">Dashboard</span>
+                </div>
+                <div class="boxes">
+                    <div class="box box4">
+                        <i class="uil-user-plus"></i>
+                        <span class="text">Contact List</span>
+                        <div class="search">
+                            <input type="text" class="search__input" placeholder="Type your text" id="searchInput">
+                            <button class="search__button">
+                                <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                                    <g>
+                                        <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-results" id="contactResults">
+                <table id="contactTable">
+                    <thead>
+                        <tr>
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be dynamically loaded here -->
+                    </tbody>
+                </table>
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+    </section>
+    <script src="view2.js"></script>
+    <script src="menu.js"></script>
+    <script type="module" src="search.js"></script>
+</body>
+</html>

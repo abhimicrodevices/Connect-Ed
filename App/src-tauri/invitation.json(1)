@@ -1,0 +1,15 @@
+{
+  "@type": "https://didcomm.org/out-of-band/1.1/invitation",
+  "@id": "ebf7c7e4-81d1-4bca-81df-553ce2289fbb",
+  "label": "Invitation to Barry",
+  "handshake_protocols": [
+    "https://didcomm.org/didexchange/1.0"
+  ],
+  "accept": [
+    "didcomm/aip1",
+    "didcomm/aip2;env=rfc19"
+  ],
+  "services": [
+    "did:peer:2.Vz6MkvH4WERFfTdRn5hA1GiZaBuKPoytn7Uf5RXSQXDBuQBDe.SeyJpZCI6IiNkaWRjb21tLTAiLCJ0IjoiZGlkLWNvbW11bmljYXRpb24iLCJwcmlvcml0eSI6MCwicmVjaXBpZW50S2V5cyI6WyIja2V5LTEiXSwiciI6W10sInMiOiJodHRwOi8vMTcyLjE3LjAuMTo4MjIwIn0"
+  ]
+}

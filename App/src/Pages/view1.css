@@ -1,0 +1,55 @@
+/* Existing styles in menu.css */
+
+/* Contact List Styles */
+.contact-list {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr {
+    background-color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem; /* Small font size */
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white; /* White text color */
+}
+
+.icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px; /* Box width */
+    height: 30px; /* Box height */
+    background-color: #333; /* Background color for the icon box */
+    border-radius: 5px; /* Rounded corners */
+    margin-right: 8px; /* Space between icon box and text */
+}
+
+.icon-box i {
+    color: white; /* Icon color */
+    font-size: 1rem; /* Icon size */
+}

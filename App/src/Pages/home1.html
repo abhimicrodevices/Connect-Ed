@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="view1.css">
+    <title>Combined Page</title>
+    <style>
+        /* Common style for both online and offline toasts */
+        .toast-container {
+            position: fixed;
+            top: 6%;
+            left: 32%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        .toast.online, .toast.offline {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .toast-content {
+            display: flex;
+            align-items: center;
+        }
+        .icon {
+            margin-right: 10px;
+            background: #b1acac;
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon i {
+            font-size: 20px;
+        }
+        .content .details {
+            margin-left: 15px;
+        }
+        .details span {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .details p {
+            color: #878787;
+        }
+        .close-icon {
+            color: #8787872f;
+            font-size: 23px;
+            cursor: pointer;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            background: #f2f2f2;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-icon:hover {
+            background: #efefef;
+        }
+        @keyframes moveToast {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        .toast.offline {
+            animation: moveToast 0.5s ease forwards;
+        }
+
+        /* Styles for the table container and scrolling */
+        .container {
+            max-height: 400px; /* Adjust the height as needed */
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+        .contact-results {
+            max-height: 400px; /* Adjust the height as needed */
+            overflow-y: auto; /* Enables vertical scrolling */
+        }
+    </style>
+
+<script>
+    
+    window.addEventListener('load', () => {
+        const notifications = ['notification1', 'notification2', 'notification3'];
+        
+        notifications.forEach((id, index) => {
+            const notification = document.getElementById(id);
+            
+            // Show the notification with a slight delay between each
+            setTimeout(() => {
+                notification.classList.add('visible');
+            }, index * 1000); // delay each notification by 1 second
+
+            // Set a timeout to hide the notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('visible');
+                notification.classList.add('hidden');
+            }, (index * 1000) + 5000); // hide each notification 5 seconds after it appears
+        });
+    });
+
+    function dismissNotification(id) {
+        const notification = document.getElementById(id);
+        notification.classList.remove('visible');
+        notification.classList.add('hidden');
+    }
+</script>
+
+    <script>
+        function dismissNotification(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        async function fetchAndInjectHTML(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                const container = document.getElementById(containerId);
+                container.innerHTML = html;
+                executeScripts(container);
+                setupEventListeners();
+            } catch (error) {
+                console.error('Error fetching HTML:', error);
+            }
+        }
+
+        function executeScripts(container) {
+            const scripts = container.querySelectorAll('script');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                newScript.type = 'text/javascript';
+                if (script.src) {
+                    newScript.src = script.src;
+                } else {
+                    newScript.textContent = script.textContent;
+                }
+                document.head.appendChild(newScript).parentNode.removeChild(newScript);
+            });
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.success-button-secondary').forEach(button => {
+                button.addEventListener('click', () => {
+                    const notificationId = button.closest('.notifications-container').id;
+                    dismissNotification(notificationId);
+                });
+            });
+
+            const searchButton = document.querySelector('.search__button');
+            const searchInput = document.getElementById('searchInput');
+            if (searchButton && searchInput) {
+                searchButton.addEventListener('click', searchContacts);
+                searchInput.addEventListener('input', searchContacts);
+            }
+        }
+
+        function searchContacts() {
+            const displayedContactData = JSON.parse(localStorage.getItem('newDisplayedContactData2') || '[]');
+            const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+            const filteredContacts = displayedContactData.filter(contact =>
+                Object.values(contact).some(value => value.toLowerCase().includes(searchInput))
+            );
+
+            displaySearchResults(filteredContacts);
+        }
+
+        function displaySearchResults(data) {
+            const tableBody = document.querySelector('#contactTable tbody');
+            const tableHead = document.querySelector('#contactTable thead tr');
+
+            tableBody.innerHTML = '';
+            tableHead.innerHTML = '';
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td class="no-results" colspan="100%">No contacts found</td></tr>';
+                return;
+            }
+
+            // Assuming all objects have the same keys
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+                tableHead.appendChild(th);
+            });
+
+            data.forEach(contact => {
+                const row = document.createElement('tr');
+                Object.values(contact).forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                tableBody.appendChild(row);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAndInjectHTML('menu.html', 'menuContainer');
+
+            if (navigator.onLine) {
+                fetchAndInjectHTML('online.html', 'toastContainer')
+                    .then(() => {
+                        document.getElementById('toastContainer').classList.add('online');
+                        document.getElementById('toastContainer').style.display = 'flex';
+                        setTimeout(() => {
+                            document.getElementById('toastContainer').style.display = 'none';
+                        }, 4000);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching online.html:', error);
+                    });
+            } else {
+                const toastContainer = document.getElementById('toastContainer');
+                toastContainer.classList.add('offline');
+                toastContainer.innerHTML = "<div class='toast-content'><div class='icon'><i class='uil uil-wifi-slash'></i></div><div class='details'><span>You're offline now</span><p>Oops! Internet connection lost.</p></div><div class='close-icon'>&times;</div></div>";
+                toastContainer.style.display = 'flex';
+                setTimeout(() => {
+                    toastContainer.style.display = 'none';
+                }, 4000);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="toastContainer" class="toast-container"></div>
+    <div id="menuContainer"></div>
+
+    <div class="notifications-container" id="notification1">
+        <div class="success">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="succes-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="success-prompt-wrap">
+                    <p class="success-prompt-heading">Recently Joined</p>
+                    <div class="success-prompt-prompt">
+                        <p>Meet Our Latest Members - Click to Connect</p>
+                    </div>
+                    <div class="success-button-container">
+                        <a href="view1.html">
+                            <button type="button" class="success-button-main">View status</button>
+                        </a>
+                        <button type="button" class="success-button-secondary" onclick="dismissNotification('notification1')">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications-container1" id="notification2">
+        <div class="success">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="succes-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="success-prompt-wrap">
+                    <p class="success-prompt-heading">Recently Updated</p>
+                    <div class="success-prompt-prompt">
+                        <p>Stay Up-to-Date with the Latest Changes - Click to See Updates</p>
+                    </div>
+                    <div class="success-button-container">
+                        <a href="view2.html">
+                            <button type="button" class="success-button-main">View status</button>
+                        </a>
+                        <button type="button" class="success-button-secondary" onclick="dismissNotification('notification2')">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications-container2" id="notification3">
+        <div class="success">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="succes-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="success-prompt-wrap">
+                    <p class="success-prompt-heading">Serach Uniersity Network</p>
+                    <div class="success-prompt-prompt">
+                        <p>Explore University Networks - Click to Discover Connections</p>
+                    </div>
+                    <div class="success-button-container">
+                        <a href="view3.html">
+                            <button type="button" class="success-button-main">View status</button>
+                        </a>
+                        <button type="button" class="success-button-secondary" onclick="dismissNotification('notification3')">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <table id="contactTable">
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <script src="view2.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>

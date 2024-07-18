@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="view1.css">
+     
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <title>Admin Dashboard Panel</title>
+    <style>
+        #contactTable {
+            display: none; /* Initially hide the table */
+        }
+
+        .alert {
+            position: fixed;
+            top: 70px; /* Change from bottom to top */
+            right: 20px;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: none; /* Initially hide the alert */
+        }
+
+        .alert.visible {
+            display: block; /* Show the alert */
+        }
+
+        /* WiFi icon */
+        .wifi-icon {
+            margin-right: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="alert" id="connectivityAlert">
+        <i class="wifi-icon uil"></i>
+        <span id="connectionStatus">You are online!</span>
+    </div>
+
+    <script>
+        function checkConnectivity() {
+            var alertBox = document.getElementById('connectivityAlert');
+            var statusMessage = document.getElementById('connectionStatus');
+            var wifiIcon = document.querySelector('.wifi-icon');
+
+            if (navigator.onLine) {
+                alertBox.style.backgroundColor = '#d4edda';
+                alertBox.style.color = '#155724';
+                statusMessage.textContent = "You are online!";
+                wifiIcon.className = 'wifi-icon uil uil-wifi'; // Set online icon class
+            } else {
+                alertBox.style.backgroundColor = '#f8d7da';
+                alertBox.style.color = '#721c24';
+                statusMessage.textContent = "You are offline!";
+                wifiIcon.className = 'wifi-icon uil uil-wifi-slash'; // Set offline icon class
+            }
+
+            alertBox.classList.add('visible');
+        }
+
+        // Initial check when the page loads
+        window.addEventListener('load', checkConnectivity);
+
+        // Listen for changes in connectivity
+        window.addEventListener('online', checkConnectivity);
+        window.addEventListener('offline', checkConnectivity);
+    </script>
+
+
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+               <img src="images/logo.png" alt="">
+            </div>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="menu.html">
+                    <i class="uil uil-estate"></i>
+                    <span class="link-name">Dashboard</span>
+                </a></li>
+                <!-- <li><a href="comment.html">
+                    <i class="uil uil-comments"></i>
+                    <span class="link-name">Comment</span>
+                </a></li> -->
+                <!-- <li><a href="#">
+                    <i class="fas fa-cogs components-icon"></i>
+                    <span class="link-name">Components</span>
+                </a></li> -->
+                <!-- <li><a href="#">
+                    <i class="uil uil-chart"></i>
+                    <span class="link-name">Analytics</span>
+                </a></li> -->
+                <li><a href="notify.html">
+                    <i class="fas fa-bell"></i>
+                    <span class="link-name">Notification</span>
+                </a></li>
+                <li><a href="analytics.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="link-name">Analytics</span>
+                </a></li>
+                <li><a href="report.html">
+                    <i class="fas fa-file-alt reports-icon"></i>
+                    <span class="link-name">Reports</span>
+                </a></li>
+            </ul>
+            
+            <ul class="nav-links">
+                <li><a href="login.html">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Logout</span>
+                </a></li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                    <span class="link-name">Dark Mode</span>
+                </a>
+
+                <div class="mode-toggle">
+                  <span class="switch"></span>
+                </div>
+                </li>
+                <li><a href="#">
+                    <i class=""></i>
+                    <span class="link-name"></span>
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+        </div>
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <span class="text">Dashboard</span>
+                </div>
+                <div class="boxes">
+                    <div class="box box4">
+                        <i class="uil-user-plus"></i>
+                        <span class="text">Contact List</span>
+                        <div class="search">
+                            <input type="text" class="search__input" placeholder="Type your text" id="searchInput">
+                            <button class="search__button">
+                                <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+                                    <g>
+                                        <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-results" id="contactResults">
+                <table id="contactTable">
+                    <thead>
+                        <tr>
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be dynamically loaded here -->
+                    </tbody>
+                </table>
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+
+           
+        
+    </section>
+
+    <div id="updateContactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Contact</h2>
+            <form id="updateContactForm">
+                <label for="updatePhone">Phone:</label>
+                <input type="text" id="updatePhone" name="phone" required>
+    
+                <label for="updateEmail">Email:</label>
+                <input type="email" id="updateEmail" name="email" required>
+    
+                <label for="updateAddress">Address:</label>
+                <input type="text" id="updateAddress" name="address" required>
+    
+                <button type="button" id="saveContactButton">Save</button>
+            </form>
+        </div>
+    </div>    
+
+    <script src="view2.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
